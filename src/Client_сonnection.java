@@ -5,7 +5,7 @@ public class Client_сonnection extends Thread {
     private Socket clientSocket = null;
     private ObjectOutputStream coos = null;
     private ObjectInputStream cois = null;
-    public  String server_message;
+    private  String server_message=null;
     public void run() {
         try {
             System.out.println("Connecting to server...");
@@ -19,7 +19,7 @@ public class Client_сonnection extends Thread {
             while (true) {
                 //server_message = cois.readObject().toString();
                 server_message = (String) cois.readObject();
-                //System.out.println("~сервер~: " +server_message);
+                System.out.println("~сервер~: " +server_message);
             }
 
         } catch (EOFException e) {
@@ -35,6 +35,24 @@ public class Client_сonnection extends Thread {
     public void sendMessage(String message) throws IOException {
         if (coos != null) {
             coos.writeObject(message); // Отправка сообщения
+        }
+    }
+
+    public String readMessage() {
+        while (true) {
+            if (server_message != null) {
+                String buf = server_message;
+                server_message = null; // Сбрасываем сообщение после чтения
+                return buf; // Возвращаем полученное сообщение
+            }
+
+            // Опционально, добавляем паузу, чтобы избежать излишней загрузки процессора
+            try {
+                Thread.sleep(100); // Пауза на 100 миллисекунд
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Восстанавливаем статус прерывания
+                return null; // Возвращаем null при прерывании
+            }
         }
     }
 

@@ -14,8 +14,14 @@ public class Main {
         Logining log = new Logining(connector);
         log.setVisible(true);
         log.setResizable(false);
-        // Пример отправки сообщения
-        // Задержка, чтобы убедиться, что соединение установлено
+
+
+    }
+}
+
+
+// Пример отправки сообщения
+// Задержка, чтобы убедиться, что соединение установлено
         /*
         try {
             Thread.sleep(1000); // Ожидание 1 секунду
@@ -38,9 +44,6 @@ public class Main {
 
         }
 */
-        //coos.writeObject("09");
+//coos.writeObject("09");
 
-        //connector.write();
-
-    }
-}
+//connector.write();
