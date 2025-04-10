@@ -16,10 +16,12 @@ public class Logining extends JFrame {
     //Socket socket= new Socket();
     public Logining(Client_сonnection connector)
     {
+
         this.connector=connector;
         setTitle("Registration");
         setSize(500, 500);
         setLayout(null);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         add(inButton);
@@ -54,21 +56,9 @@ public class Logining extends JFrame {
         /*реализация метода, который вызывается при наступлении action-события*/
         public void actionPerformed(ActionEvent event) {
             dispose();
-
-            if (usernameField.getText().isEmpty() && passwordField.getPassword().length == 0) {
-                System.out.println("Пожалуйста, заполните все поля.");
-
-            } else {
-                String mess= usernameField.getText()+" "+passwordField.getPassword().length;
-                //System.out.println("ok");
-                try {
-                    connector.sendMessage(mess);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                //bd.insertUser(usernameField.getText(), new String(passwordField.getPassword()));
-                //bd.insertStatus(usernameField.getText(),1);
-            }
+            Registrate reg = new Registrate(connector);
+            reg.setVisible(true);
+            reg.setResizable(false);
 
 
 
@@ -78,21 +68,25 @@ public class Logining extends JFrame {
     class infoButton implements ActionListener {
         /*реализация метода, который вызывается при наступлении action-события*/
         public void actionPerformed(ActionEvent event) {
+
             if (usernameField.getText().isEmpty() && passwordField.getPassword().length == 0) {
                 System.out.println("Пожалуйста, заполните все поля.");
 
             } else {
-                String mess=Commands.autorisation+" gmail "+usernameField.getText()+" "+passwordField.getText();
+                String mess=Commands.logining+" "+usernameField.getText()+" "+passwordField.getText();
 
                 try {
                     connector.sendMessage(mess);
                     String answer =connector.readMessage();
+                    String word = commands.initCommand(answer);
 
-
-                    if ( "0".equals(answer)){
-                        System.err.println("error : "+ answer);
+                    if ( "1".equals(word)){
+                        dispose();
+                        Registrate reg = new Registrate(connector);
+                        reg.setVisible(true);
+                        reg.setResizable(false);
                     }else{
-                        System.out.println("answer : "+ answer);
+                        System.out.println(word);
                     }
 
                 } catch (IOException e) {
