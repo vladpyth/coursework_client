@@ -11,6 +11,8 @@ public class Logining extends JFrame {
     private JTextField usernameField = new JTextField(20);
     private JLabel passwordLabel = new JLabel("Password:");
     private JPasswordField passwordField = new JPasswordField(20);
+    private JLabel errorLabel = new JLabel();
+
     Client_сonnection connector;
     Commands commands = new Commands();
     //Socket socket= new Socket();
@@ -30,7 +32,8 @@ public class Logining extends JFrame {
         add(usernameField);
         add(passwordLabel);
         add(passwordField);
-        int c=2;
+        add(errorLabel);
+
         usernameLabel.setBounds(100,130,200,20);
         usernameField.setBounds(250,130,130,20);
 
@@ -39,6 +42,9 @@ public class Logining extends JFrame {
 
         passwordLabel.setBounds(100,170,200,20);
         passwordField.setBounds(250,170,130,20);
+
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setBounds(100,200,300,20);
 
         registerButton.setBounds(70,300,130,30);
         registerButton.setForeground(Color.black); //установка цвета переднего фона кнопки
@@ -69,8 +75,9 @@ public class Logining extends JFrame {
         /*реализация метода, который вызывается при наступлении action-события*/
         public void actionPerformed(ActionEvent event) {
 
-            if (usernameField.getText().isEmpty() && passwordField.getPassword().length == 0) {
-                System.out.println("Пожалуйста, заполните все поля.");
+            if (usernameField.getText().isEmpty() || passwordField.getPassword().length == 0) {
+                //errorLabel.setForeground(Color.GREEN);
+                errorLabel.setText("Please fill in all fields.");
 
             } else {
                 String mess=Commands.logining+" "+usernameField.getText()+" "+passwordField.getText();
@@ -82,10 +89,20 @@ public class Logining extends JFrame {
 
                     if ( "1".equals(word)){
                         dispose();
-                        Registrate reg = new Registrate(connector);
-                        reg.setVisible(true);
-                        reg.setResizable(false);
-                    }else{
+                        ClientWindow window = new ClientWindow(connector,usernameField.getText());
+                        window.setVisible(true);
+                        window.setResizable(false);
+                    } else if ("2".equals(word)) {
+                        dispose();
+                        AdminWindow window = new AdminWindow(connector, usernameField.getText());
+                        window.setVisible(true);
+                        window.setResizable(false);
+                        //System.out.println("admin");
+                    }else if ("-1".equals(word)) {
+                        errorLabel.setText("this user has been blocked.");
+
+                    } else{
+                        errorLabel.setText(word);
                         System.out.println(word);
                     }
 

@@ -3,35 +3,40 @@ import java.lang.reflect.Method;
 public class Commands {
     static final String logining="logining";
     static final String autorisation="autorisation";
-
+    static final String all_data_user="alldatauser";
+    static final String updateUserTable="updateUserTable";
 
 
     public String logining(String[] com){
 
-        String result="1";
+        String result=null;
 
         if("0".equals(com[0])){
-            result= "error : Incorrect login or password entered";
+            result= "error : Incorrect login or password entered.";
+            return result;
+        }else {
+            result=com[2];
             return result;
         }
 
-        return result;
+
     }
 
     public String autorisation(String[] com){
         String result="1";
 
         if("0".equals(com[0])){
-            result= "error : The entered login or email is already in use";
-            return result;
+            result= "error : The entered login or email is already in use.";
+
         }
+
 
         return result;
     }
 
 
 
-    private String[] splitStringIntoArray(String input) {
+    public String[] splitStringIntoArray(String input) {
         // Разбиваем строку на слова по пробелам
         String[] words = input.split("\\s+");
         return words;

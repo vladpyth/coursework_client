@@ -7,7 +7,7 @@ import java.net.Socket;
 
 
 public class Main {
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+    public static void main(String[] args)  {
 
         Client_сonnection connector = new Client_сonnection();
         connector.start(); // Запуск потока

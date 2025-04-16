@@ -13,6 +13,8 @@ public class Registrate extends JFrame {
     private JTextField usernameField = new JTextField(20);
     private JLabel passwordLabel = new JLabel("Password:");
     private JPasswordField passwordField = new JPasswordField(20);
+    private JLabel errorLabel = new JLabel();
+
     Client_сonnection connector;
     Commands commands = new Commands();
     //Socket socket= new Socket();
@@ -34,6 +36,7 @@ public class Registrate extends JFrame {
         add(usernameField);
         add(passwordLabel);
         add(passwordField);
+        add(errorLabel);
 
         gmailLabel.setBounds(100,90,200,20);
         gmailField.setBounds(250,90,130,20);
@@ -46,6 +49,9 @@ public class Registrate extends JFrame {
 
         passwordLabel.setBounds(100,170,200,20);
         passwordField.setBounds(250,170,130,20);
+
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setBounds(100,200,300,20);
 
         back.setBounds(70,300,130,30);
         back.setForeground(Color.black); //установка цвета переднего фона кнопки
@@ -75,20 +81,29 @@ public class Registrate extends JFrame {
     class registrait implements ActionListener {
         /*реализация метода, который вызывается при наступлении action-события*/
         public void actionPerformed(ActionEvent event) {
-            if (usernameField.getText().isEmpty() && passwordField.getPassword().length == 0) {
-                System.out.println("Пожалуйста, заполните все поля.");
+            if (gmailField.getText().isEmpty() && usernameField.getText().isEmpty() && passwordField.getPassword().length == 0) {
+                errorLabel.setText("Please fill in all fields.");
 
             } else {
                 String mess=Commands.autorisation+" "+gmailField.getText()+" "+usernameField.getText()+" "+passwordField.getText();
 
                 try {
+
                     connector.sendMessage(mess);
                     String answer =connector.readMessage();
                     String word = commands.initCommand(answer);
 
                     if ( "1".equals(word)){
+                        errorLabel.setForeground(Color.GREEN);
+                        errorLabel.setText("You have registered successfully!");
 
+
+                        dispose();
+                        Logining log = new Logining(connector);
+                        log.setVisible(true);
+                        log.setResizable(false);
                     }else{
+                        errorLabel.setText(word);
                         System.out.println(word);
                     }
 
